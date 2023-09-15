@@ -18,7 +18,9 @@ outputs_folder = 'outputs'
 gen_PATH =os.path.join(outputs_folder,'gen.pt')
 disc_PATH = os.path.join(outputs_folder,'disc.pt')
 trail_counter_PATH = os.path.join(outputs_folder,'trial_counter.txt')
-initialize =False
+NUM_EPOCHS  =int(sys.argv[1])
+initialize = eval(sys.argv[2])
+assert isinstance(initialize, bool)
 
 if not os.path.isfile(trail_counter_PATH):
   f = open(trail_counter_PATH, "w")
@@ -77,7 +79,6 @@ else:
     trial = int(f.read())
     f.close()
 
-NUM_EPOCHS  =int(sys.argv[1])
 trial = trial+NUM_EPOCHS
 for epoch in range(NUM_EPOCHS):
     # Target labels not needed! <3 unsupervised
@@ -103,8 +104,7 @@ for epoch in range(NUM_EPOCHS):
         loss_gen.backward()
         opt_gen.step()
 
-        print( f"Epoch [{epoch}/{NUM_EPOCHS}] Batch {batch_idx}/{len(dataloader)} \
-              Loss D: {loss_disc.item()}, loss G: {loss_gen.item()}")
+        print("Epoch\t",epoch,'/',NUM_EPOCHS,"\tBatch\t",batch_idx,'/',len(dataloader),"\tLoss D:\t", loss_disc.item(),"\tloss G:\t",loss_gen.item())
      
     torch.save(gen.state_dict(), gen_PATH)
     torch.save(disc.state_dict(), disc_PATH)
