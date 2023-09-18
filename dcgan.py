@@ -27,16 +27,17 @@ if not os.path.isfile(trail_counter_PATH):
   f.write(str(0))
   f.close()
  
-BATCH_SIZE = 8
+BATCH_SIZE = 4
 dataset = MyDataLoader()
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=BATCH_SIZE,
                                          shuffle=True)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(device)
 NOISE_DIM =100
-D_LEARNING_RATE = 2e-4  # could also use two lrs, one for gen and one for disc
-G_LEARNING_RATE = 2e-4  # could also use two lrs, one for gen and one for disc
+D_LEARNING_RATE = int(sys.argv[3])  *1e-4  # could also use two lrs, one for gen and one for disc
+G_LEARNING_RATE = int(sys.argv[4])  *1e-4# could also use two lrs, one for gen and one for disc
 
 
 gen = Generator().to(device)
@@ -105,13 +106,13 @@ for epoch in range(NUM_EPOCHS):
         opt_gen.step()
 
         print("Epoch\t",epoch,'/',NUM_EPOCHS,"\tBatch\t",batch_idx,'/',len(dataloader),"\tLoss D:\t", loss_disc.item(),"\tloss G:\t",loss_gen.item())
-     
-    torch.save(gen.state_dict(), gen_PATH)
-    torch.save(disc.state_dict(), disc_PATH)
-    trial = trial+1
+    if epoch %10:
+        torch.save(gen.state_dict(), gen_PATH)
+        torch.save(disc.state_dict(), disc_PATH)
+        trial = trial+1
 
-    f = open(trail_counter_PATH, "w")
-    f.write(str(trial))
-    f.close()
+        f = open(trail_counter_PATH, "w")
+        f.write(str(trial))
+        f.close()
     
     
