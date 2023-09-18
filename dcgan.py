@@ -15,6 +15,8 @@ from data_loader import MyDataLoader
 import sys
 
 outputs_folder = 'outputs'
+if not os.path.exists(outputs_folder):
+    os.makedirs(outputs_folder)
 gen_PATH =os.path.join(outputs_folder,'gen.pt')
 disc_PATH = os.path.join(outputs_folder,'disc.pt')
 trail_counter_PATH = os.path.join(outputs_folder,'trial_counter.txt')
@@ -110,7 +112,7 @@ for epoch in range(NUM_EPOCHS):
         torch.save(gen.state_dict(), gen_PATH)
         torch.save(disc.state_dict(), disc_PATH)
         trial = trial+1
-
+        print('saved models')
         f = open(trail_counter_PATH, "w")
         f.write(str(trial))
         f.close()
