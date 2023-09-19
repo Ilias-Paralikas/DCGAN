@@ -108,13 +108,13 @@ for epoch in range(NUM_EPOCHS):
         opt_gen.step()
 
         print("Epoch\t",epoch,'/',NUM_EPOCHS,"\tBatch\t",batch_idx,'/',len(dataloader),"\tLoss D:\t", loss_disc.item(),"\tloss G:\t",loss_gen.item())
-    if epoch %10:
-        torch.save(gen.state_dict(), gen_PATH)
-        torch.save(disc.state_dict(), disc_PATH)
-        trial = trial+1
-        print('saved models')
-        f = open(trail_counter_PATH, "w")
-        f.write(str(trial))
-        f.close()
+    
+    torch.save(gen.state_dict(), gen_PATH)
+    torch.save(disc.state_dict(), disc_PATH)
+    trial = trial+1
+    print('saved models')
+    f = open(trail_counter_PATH, "w")
+    f.write(str(trial))
+    f.close()
     
     
